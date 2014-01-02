@@ -1,0 +1,20 @@
+{
+  "name": "gpschat",
+  "version": "0.1.0",
+  "description": "GPS-Coordinated chat",
+  "main": "core.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "Node.js"
+  ],
+  "author": "Thomas Mundal - Mundal Software <thmundal@gmail.com>",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "dependencies" : {
+    "socket.io" : "*",
+    "node-uuid" : "*"
+  }
+}
