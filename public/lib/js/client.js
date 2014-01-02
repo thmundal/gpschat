@@ -98,6 +98,14 @@ window.addEventListener("load", function() {
                         break;
                 }
                 break;
+            case "userlist":
+                $("#cl").html("");
+                var userlist = data.data;
+                for(var i in userlist) {
+                    var username = userlist[i].username;
+                    $("#cl").append($("<div>").html(username));
+                }
+            break;
         }
     });
 

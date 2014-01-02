@@ -29,7 +29,10 @@ User.prototype.startReceiving = function() {
     var user = this;
 
     user.socket.emit("function", { func: "login", state: "accepted", user: { id: user.id, username: user.username } });
-    user.socket.broadcast.emit("message", { message: user.username + " has returned to the chat!" });
+    user.socket.emit("message", { message: "Welcome to the GPSChat, " + user.username });
+    user.socket.broadcast.emit("message", { message: user.username + " entered the chat!" });
+    
+    this.sendClientList();
     
     user.socket.on("message", function(data) {
         user.socket.broadcast.emit("message", { message: user.username + ": " + data.message });
@@ -66,10 +69,7 @@ User.prototype.sendPrivateMessage = function(message, receiver) {
         return false;
     }
     
-    if(r && r.socket)
-        return r.socket.emit("private_message", { "message": message, "sender" : this.username});
-        
-    return false;
+    return r.socket.emit("private_message", { "message": message, "sender" : this.username});
 };
 
 User.findUser = function(username) {
@@ -86,6 +86,16 @@ User.findUserById = function(id) {
             return users[i];
     }
     return false;
+}
+
+User.prototype.sendClientList = function() {
+    var usersToSend = [];
+    for(var i in users) {
+        usersToSend[i] = { username: users[i].username };
+    }
+
+    this.socket.emit("function", {func: "userlist", data: usersToSend});
+    this.socket.broadcast.emit("function", {func: "userlist", data: usersToSend});
 }
 
 User.prototype.getDistance = function(user2) {

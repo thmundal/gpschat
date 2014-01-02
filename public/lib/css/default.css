@@ -8,11 +8,21 @@ body {
 
 .chatContent {
     overflow:auto;
-    width:100%;
+    width:77%;
     height:400px;
     border:1px solid #333333;
     border-radius:5px;
     padding:4px;
+    float:left;
+}
+
+.chatList {
+    float:right;
+    width:20%;
+    border:1px solid #333333;
+    height:400px;
+    padding:4px;
+    border-radius:5px;
 }
 
 .chatInput {
