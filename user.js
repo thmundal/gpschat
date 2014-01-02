@@ -45,9 +45,15 @@ User.prototype.startReceiving = function() {
             user.sendPrivateMessage(data.message);
         }
     });
+    
+    user.socket.on("disconnect", function(data) {
+        user.logout();
+    });
 }
 
 User.prototype.logout = function() {
+    var user = this;
+    this.socket.broadcast.emit("message", { message: user.username + " has left the chat." });
     if(users.indexOf(this) > 0)
         users.splice(users.indexOf(this), 1);
 };
