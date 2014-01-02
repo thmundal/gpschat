@@ -45,23 +45,6 @@ function getDistance(user1, user2) {
     return d;
 }
 
-function startReceiving(socket, user) {
-    socket.emit("function", { func: "login", state: "accepted", user: { id: user.id, username: user.username } });
-    socket.broadcast.emit("message", { message: user.username + " has returned to the chat!" });
-    
-    socket.on("message", function(data) {
-        socket.broadcast.emit("message", { message: user.username + ": " + data.message });
-        socket.emit("message", { message: user.username + ": " + data.message });
-    });
-    
-    socket.on("privatemessage", function(data) {
-        var user = User.findUser(data.username);
-        if(user) {
-            user.sendPrivateMessage(data.message);
-        }
-    });
-}
-
 var io = require("socket.io").listen(app);
 
 io.sockets.on("connection", function(socket) {
@@ -77,7 +60,7 @@ io.sockets.on("connection", function(socket) {
                     
                 user = new User(data.data);
                 if(user.login(socket, data.id)) {
-                    startReceiving(socket, user);
+                    user.startReceiving();
                 } else {
                     socket.emit("function", { func: "login", state: "failed" });
                     console.error("Cannot login");

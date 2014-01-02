@@ -25,6 +25,25 @@ User.prototype.login = function(socket, uid) {
     return null;
 };
 
+User.prototype.startReceiving = function() {
+    var user = this;
+
+    user.socket.emit("function", { func: "login", state: "accepted", user: { id: user.id, username: user.username } });
+    user.socket.broadcast.emit("message", { message: user.username + " has returned to the chat!" });
+    
+    user.socket.on("message", function(data) {
+        user.socket.broadcast.emit("message", { message: user.username + ": " + data.message });
+        user.socket.emit("message", { message: user.username + ": " + data.message });
+    });
+    
+    user.socket.on("privatemessage", function(data) {
+        var user = User.findUser(data.username);
+        if(user) {
+            user.sendPrivateMessage(data.message);
+        }
+    });
+}
+
 User.prototype.logout = function() {
     if(users.indexOf(this) > 0)
         users.splice(users.indexOf(this), 1);
