@@ -20,31 +20,6 @@ var app = require("http").createServer(function(req, res) {
 }).listen(8081);
 // *********** WEB SERVER END *************
 
-// Users "database"
-
-function getDistance(user1, user2) {
-    if(user1.position === null || user2.position === null)
-        return false;
-        
-    var lat1 = user1.position.coords.latitude;
-    var lat2 = user1.position.coords.longitude;
-    var lon1 = user2.position.coords.latitude;
-    var lon2 = user2.position.coords.longitude;
-    
-    var R = 6371; // km
-    var dLat = (lat2-lat1).toRad();
-    var dLon = (lon2-lon1).toRad();
-    lat1 = lat1.toRad();
-    lat2 = lat2.toRad();
-    
-    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-    var d = R * c;
-    
-    return d;
-}
-
 var io = require("socket.io").listen(app);
 
 io.sockets.on("connection", function(socket) {
