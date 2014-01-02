@@ -71,20 +71,6 @@ io.sockets.on("connection", function(socket) {
     
     socket.on("function", function(data) {
         switch(data.func) {
-            case 'check_username':
-                user = User.findUser(data.username);
-                if(user) { // Found username
-                    if(data.id == user.id) { // Username belongs to the one that logs in
-                        console.log("user exists, sending user information and login state");
-                        
-                        startReceiving(socket, data);
-                        break;
-                    } 
-                } else {
-                    socket.emit("function", { func: "login", state: "failed" });
-                }
-                break;
-                
             case 'login':
                 if(!data.data || data.data === null || data.data === "")
                     break;
