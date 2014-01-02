@@ -16,12 +16,13 @@ User.prototype.login = function(socket, uid) {
     if(users.indexOf(this) < 0 && !findUser) {
         this.id = uuid.v1();
         users.push(this);
-        return true;
+        return this;
     } else if(findUser && uid == findUser.id) {
-        return true;
+        this.id = findUser.id;
+        return this;
     }
     
-    return false;
+    return null;
 };
 
 User.prototype.logout = function() {
