@@ -1,11 +1,16 @@
-function setCookie(c_name,value,exdays) {
+function setCookie(c_name,value,exdays,json) {
     var exdate=new Date();
     exdate.setDate(exdate.getDate() + exdays);
+    
+    if(json)
+        value = JSON.stringify(value);
+    
     var c_value=escape(value) + ((exdays===null) ? "" : "; expires="+exdate.toUTCString());
+    
     document.cookie=c_name + "=" + c_value;
 }
 
-function getCookie(c_name) {
+function getCookie(c_name, json) {
     var c_value = document.cookie;
     var c_start = c_value.indexOf(" " + c_name + "=");
     if (c_start == -1){
@@ -22,13 +27,17 @@ function getCookie(c_name) {
         }
         c_value = unescape(c_value.substring(c_start,c_end));
     }
+    
+    if(json)
+        return JSON.parse(c_value);
+    
     return c_value;
 }
 
 
 
 function r() {
-    setCookie("gpschat_user", null, -1);
+    setCookie("gpschat_user", null, -1, true);
 }
 
 function displayLoginDialog(socket) {
@@ -55,15 +64,14 @@ window.addEventListener("load", function() {
     var c = document.getElementById("cc");
     var ci = document.getElementById("cio");
     var form = document.getElementById("cif");
-    var user_cookie = getCookie("gpschat_user");
+    var user_cookie = getCookie("gpschat_user", true);
 
     socket.on("connection", function(data) {
         if(user_cookie === null) {
             displayLoginDialog(socket);
         } else {
             // We have a cookie from earlier
-            socket.emit("function", {func: "check_username", id: user_cookie.id, username: user_cookie.username });
-            console.log("trying to send cookie id: " + user_cookie);
+            socket.emit("function", { func: "login", data: user_cookie.username, id: user_cookie.id});
         }
         c.innerHTML = data.message;
     });
@@ -82,14 +90,10 @@ window.addEventListener("load", function() {
                 switch(data.state) {
                     case "accepted":
                         $("#login").dialog("close");
-                        var u = {
-                            id: data.user.id,
-                            username: data.user.username
-                        };
-                        setCookie("gpschat_user", u, 30);
+                        setCookie("gpschat_user", data.user, 30, true);
                         break;
                     case "failed":
-                        r();
+                        //r();
                         displayLoginDialog(socket);
                         break;
                 }

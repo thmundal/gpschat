@@ -81,8 +81,7 @@ io.sockets.on("connection", function(socket) {
                         break;
                     } 
                 } else {
-                        socket.emit("function", { func: "login", state: "failed" });
-                        console.error("Cannot find user with username " + data.username);
+                    socket.emit("function", { func: "login", state: "failed" });
                 }
                 break;
                 
@@ -91,7 +90,7 @@ io.sockets.on("connection", function(socket) {
                     break;
                     
                 user = new User(data.data);
-                if(user.login(socket, data.uid)) {
+                if(user.login(socket, data.id)) {
                     startReceiving(socket, user);
                 } else {
                     socket.emit("function", { func: "login", state: "failed" });

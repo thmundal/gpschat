@@ -11,9 +11,13 @@ var User = function(username) {
 User.prototype.login = function(socket, uid) {
     this.socket = socket;
     
-    if(users.indexOf(this) < 0 && !User.findUser(this.username)) {
+    var findUser = User.findUser(this.username);
+    
+    if(users.indexOf(this) < 0 && !findUser) {
         this.id = uuid.v1();
         users.push(this);
+        return true;
+    } else if(findUser && uid == findUser.id) {
         return true;
     }
     
