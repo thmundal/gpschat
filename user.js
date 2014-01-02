@@ -58,6 +58,15 @@ User.prototype.logout = function() {
         users.splice(users.indexOf(this), 1);
 };
 
+User.prototype.changeUsername = function(new_username) {
+    var old_username = this.username;
+    var userid = this.id;
+    this.username = new_username;
+    this.socket.broadcast.emit("message", { message: old_username + " is now known as " + new_username });
+    this.socket.emit("function", { func: "change_username", new_user: { username: new_username, id: userid }});
+    this.sendClientList();
+}
+
 // What is the point of this function?
 User.prototype.sendMessage = function(message) {
     if(this.socket !== null)

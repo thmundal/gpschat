@@ -50,12 +50,15 @@ io.sockets.on("connection", function(socket) {
                     var t = split.splice(1, split.length);
                     var message = t.join(" ");
                     
-                    console.log(message);
                     user.sendPrivateMessage(message, username);
                 } else {
                     console.log("user not found?");
                     console.log(user);
                 }
+                break;
+            case 'nick':
+                if(user)
+                    user.changeUsername(data.data);
                 break;
         }
     });

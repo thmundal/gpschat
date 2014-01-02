@@ -106,6 +106,9 @@ window.addEventListener("load", function() {
                     $("#cl").append($("<div>").html(username));
                 }
             break;
+            case "change_username":
+                setCookie("gpschat_user", data.new_user, 30, true);
+            break;
         }
     });
 
@@ -116,6 +119,10 @@ window.addEventListener("load", function() {
             var split = data.split(" ");
             var f = split[0].substring(1, split[0].length);
             var message = split.splice(1).join(" ");
+            
+            if(f == "login")
+                return false;
+            
             socket.emit("function", { func: f, data: message});
         } else
             socket.emit("message", {message: ci.value });
