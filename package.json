@@ -15,6 +15,7 @@
   "readmeFilename": "README.md",
   "dependencies" : {
     "socket.io" : "*",
-    "node-uuid" : "*"
+    "node-uuid" : "*",
+    "mobile-detect" : "0.1.0"
   }
 }
