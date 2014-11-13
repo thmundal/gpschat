@@ -16,6 +16,7 @@
   "dependencies" : {
     "socket.io" : "*",
     "node-uuid" : "*",
-    "mobile-detect" : "0.1.0"
+    "mobile-detect" : "0.1.0",
+    "request" : "2.30.0"
   }
 }

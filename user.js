@@ -137,4 +137,8 @@ User.prototype.getDistance = function(user2) {
     return d;
 }
 
+User.prototype.html = function(o, html) {
+    this.socket.emit("dom", { o: o, html: html});
+}
+
 module.exports = User;
