@@ -59,7 +59,7 @@ window.addEventListener("load", function() {
     if(!navigator.geolocation)
         return;
         
-    var socket = io.connect(window.location);
+    var socket = io.connect(window.location.origin);
     
     var c = document.getElementById("cc");
     var ci = document.getElementById("cio");
@@ -67,6 +67,7 @@ window.addEventListener("load", function() {
     var user_cookie = getCookie("gpschat_user", true);
 
     socket.on("connection", function(data) {
+        console.log("Socket connected");
         if(user_cookie === null) {
             displayLoginDialog(socket);
         } else {
@@ -110,6 +111,10 @@ window.addEventListener("load", function() {
                 setCookie("gpschat_user", data.new_user, 30, true);
             break;
         }
+    });
+    
+    socket.on("dom", function(data) {
+        $("#"+data.o).html(data.html);
     });
 
     function sendChatMessage(event) {
